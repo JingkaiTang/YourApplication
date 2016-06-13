@@ -32,3 +32,5 @@ deploy:
   on:
     tag: true
     repo: JingkaiTang/YourApplication
+  branches:
+    only: master
