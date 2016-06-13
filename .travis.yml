@@ -31,7 +31,7 @@ before_script:
   - adb shell input keyevent 82 &
 
 script:
-  - ./gradlew build connectedCheck
-  - adb shell am force-stop com.tangjingkai.android.yourapplication
-  - adb shell am force-stop com.tangjingkai.android.yourapplication.test
-  - adb shell am instrument -w -r   -e debug false -e class com.tangjingkai.android.yourapplication.YourUITest#testYourActivity com.tangjingkai.android.yourapplication.test/android.support.test.runner.AndroidJUnitRunner
+  # Local unit test
+  - ./gradlew test
+  # Instrumented unit test
+  - ./gradlew cAT
