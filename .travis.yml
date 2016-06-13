@@ -1,0 +1,44 @@
+language: android
+android:
+  components:
+    # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    - platform-tools
+    - tools
+
+    # The BuildTools version used by your project
+    - build-tools-23.0.3
+
+    # The SDK version used to compile your project
+    - android-23
+
+    # Additional components
+    # - extra-google-google_play_services
+    # - extra-google-m2repository
+    # - extra-android-m2repository
+    # - addon-google_apis-google-19
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    - sys-img-armeabi-v7a-android-23
+    # - sys-img-x86-android-23
+
+# Emulator Management: Create, Start and Wait
+before_script:
+  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
+  - emulator -avd test -no-audio -no-window &
+  - android-wait-for-emulator
+  - adb shell input keyevent 82 &
+
+script:
+  # build app and assemble APK, in debug mode
+  - ./gradlew assembleDebug
+  # run all the local unit tests of app module
+  - ./gradlew :testDebug
+  # run all the instrumented tests of app module - DISABLED until we get an stable setup for Espresso in Travis
+  # - ./gradlew connectedDebugAndroidTest --info
+  # install app, then assemble and install instrumented tests of app module
+  - ./gradlew :installDebug
+  - ./gradlew :installDebugAndroidTest
+  # run sample instrumented unit test
+  - adb shell am instrument -w -r   -e debug false -e class com.tangjingkai.android.yourapplication.YourUITest#testYourActivity com.tangjingkai.android.yourapplication.test/android.support.test.runner.AndroidJUnitRunner
