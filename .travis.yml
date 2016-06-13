@@ -38,7 +38,9 @@ script:
   # run all the instrumented tests of app module - DISABLED until we get an stable setup for Espresso in Travis
   # - ./gradlew connectedDebugAndroidTest --info
   # install app, then assemble and install instrumented tests of app module
-  - ./gradlew :installDebug
-  - ./gradlew :installDebugAndroidTest
+  # - ./gradlew :installDebug
+  # - ./gradlew :installDebugAndroidTest
   # run sample instrumented unit test
+  - adb shell am force-stop com.tangjingkai.android.yourapplication
+  adb shell am force-stop com.tangjingkai.android.yourapplication.test
   - adb shell am instrument -w -r   -e debug false -e class com.tangjingkai.android.yourapplication.YourUITest#testYourActivity com.tangjingkai.android.yourapplication.test/android.support.test.runner.AndroidJUnitRunner

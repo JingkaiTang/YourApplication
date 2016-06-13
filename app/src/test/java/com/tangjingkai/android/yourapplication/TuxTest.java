@@ -31,6 +31,11 @@ public class TuxTest {
         assertEquals(Tux.getTuxString(name, age), tux.toString());
     }
 
+    @Test
+    public void testFailure() throws Exception {
+        assertEquals(1, 2);
+    }
+
     @Before
     public void beforeTux() {
         Tux.setTux_info(info);
