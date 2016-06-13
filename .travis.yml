@@ -1,45 +1,32 @@
 language: android
 android:
   components:
-    # Uncomment the lines below if you want to
-    # use the latest revision of Android SDK Tools
-    - platform-tools
-    - tools
-
-    # The BuildTools version used by your project
-    - build-tools-23.0.3
-
-    # The SDK version used to compile your project
-    - android-23
-
-    # Additional components
-    # - extra-google-google_play_services
-    # - extra-google-m2repository
-    - extra-android-m2repository
-    # - addon-google_apis-google-19
-
-    # Specify at least one system image,
-    # if you need to run emulator(s) during your tests
-    - sys-img-armeabi-v7a-android-23
-    # - sys-img-x86-android-23
-
-# Emulator Management: Create, Start and Wait
+  - platform-tools
+  - tools
+  - build-tools-23.0.3
+  - android-23
+  - extra-android-m2repository
+  - sys-img-armeabi-v7a-android-23
 before_script:
-  - echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
-  - emulator -avd test -no-audio -no-window &
-  - android-wait-for-emulator
-  - adb shell input keyevent 82 &
-
+- echo no | android create avd --force -n test -t android-19 --abi armeabi-v7a
+- emulator -avd test -no-audio -no-window &
+- android-wait-for-emulator
+- adb shell input keyevent 82 &
 script:
-  - ./gradlew build connectedCheck
-  # Local unit test
-  - ./gradlew test
-  # Instrumented unit test
-  - ./gradlew cAT
-
+- "./gradlew assembleDebug"
+- "./gradlew test"
+- "./gradlew cAT"
+- "./gradlew assembleRelease"
 notifications:
   email:
     recipients:
-      - jingkaitang@qq.com
+    - jingkaitang@qq.com
     on_success: always
     on_failure: always
+deploy:
+  provider: releases
+  api_key:
+    secure: gfTb8P8JMrRBYjXHU6Mo8jyKQk0YlJB/eJL1bCkiJ4q5GvK4ox4AfZPvD7KvM4YNbNoy3LKth32vUT/6MbhXUxMkZs0eN1cHJTwXlTjXdIkm3nKoPsBH1RyMwBk7Z+v9/aPSK6ee56zzewXzdrfvsiqtePCvVRFpxpDnZGRHFQR3IRgrUu5K8qSmlOI2Z/6NArq8N+5whL7trL/5e5s9/V6IhI0JOGhRuK2HEKmxPmq1mddOSjc0iXTlczkX/hSvD2xm89xw2NnqB86hfnBdYwMt+DkxWHfbSlE+bsNyLQPvUyb/06VxP6Ef9LghpwOs8fnaSCwGVmrSyZYGN1RewrrnmFqoyOATICrde38vhAAWIqQL+8U/PFeStU6p7t5SI9JJiYWJoDpP+1zdFghRjwrQn6l9iokzBe8AevEnE7dawYnu7DQJAOtAf//Bm86RdyJQCD3vZUyrz0pdyo0XK/6VjGiqMs9GUCHSrIr5rQS1Fo+mpPmjrTTNRJIBhd9GQEB2DCm9O8vEmjMLaP4Qro0o6B+Hbir7jCLdLk3qJLMNIaChzZ0+e9NKCXEqbJYvtwRVXDNFPZY550TJ31XGqydC7vb+No8uJAp+ORQGYhZWdDQZ95vozWbLZi0Vo90Io71FCrLri9FVUVkMzv3QGwi8P9D4JcAfzmI7d+Fb3dc=
+  file: app/build/outputs/apk/app-release-unsigned.apk
+  on:
+    repo: JingkaiTang/YourApplication
